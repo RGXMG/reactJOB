@@ -21,10 +21,9 @@ const initState = {
 export default function user(state = initState, action) {
     switch (action.type) {
         case AUTH_SUCCESS:
-            return {...state, msg: action.payload.msg,redirect:rediectTo(action.payload), isAuth: true, ...action.payload.data};
+            return {...state,isAuth: true, msg: action.payload.msg,redirect:rediectTo(action.payload.data),  ...action.payload.data};
             break;
         case ERROR_MSG:
-
             return {...state, isAuth: false, msg: action.msg};
             break;
         default:
@@ -74,23 +73,26 @@ export  function register(state) {
             axios.post('/user/register', {name, pwd, type}).then((res) => {
                 if (res.status === 200 && res.data.code === 0) {
                     const msg  = res.data.msg,
-                          data = fromatId(res.data.data);
+                          data = fromatId(res.data.data); //格式化ID
                     dispatch(authSuccess({msg,data}));
                 }
                 else {
                     dispatch(errMsg(res.data.msg));
                 }
             });
-        }
+        };
     }
 }
 
 export function updateUserInfo(state){
-    var {title,company,money,desc} = state;
+    var {title,avatar,company,money,desc} = state;
         return dispatch=>{
-            axios.post('',{title,company,money,desc}).then((res)=>{
+            axios.post('/user/update',state).then((res)=>{
                 if(res.status===200 && res.data.code===0){
-
+                   dispatch(authSuccess(res.data));
+                }
+                else{
+                    dispatch(errMsg(res.data.msg));
                 }
             })
         }

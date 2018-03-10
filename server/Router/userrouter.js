@@ -11,12 +11,18 @@ const User = model.getModel('user');
 
 const _filter = {'pwd':0,'__v':0}
 
+function NoKonwError(res){
+    return res.json({code:0,msg:'服务器错误，请刷新后重试！'});
+}
+
 //清除所有MongoDB数据
+
 // User.remove({},function(err,doc){
 //     if(doc){
 //         console.log('删除成功'+doc);
 //     }
 // });
+
 
 Router.get('/info',function(req,res){
     //判断cookie信息
@@ -44,7 +50,6 @@ Router.post('/login',function(req,res){
         }
         else{
             res.cookie('userid',doc._id)  //设置cookie信息
-
             return res.json({code:0,data:doc})
         }
     })
@@ -70,9 +75,7 @@ Router.post('/register',function(req,res){
         // });
 
         User.create({name,pwd:utilyMd5(pwd),type},_filter,function(err,doc){
-            if(err){
-                return res.json({code:1,msg:'服务器错误，请稍后尝试'});
-            }
+            err && NoKonwError(res);
             //返回cookie信息
             res.cookie('userid',doc._id);
             const {_id,name,type}=doc;
@@ -80,6 +83,20 @@ Router.post('/register',function(req,res){
         })
     })
 });
+
+Router.post('/update',function(req,res){
+    const userid=req.cookies.userid;
+    if(!userid) return res.json.dumps({code:-1});
+    const body = req.body;
+    User.findByIdAndUpdate(userid,body,function(err,doc){
+        err && NoKonwError(res);
+        const data=Object.assign({},{
+            user:doc.user,
+            type:doc.type,
+        },body);
+        return res.json({code:0,data});
+    })
+})
 
 Router.get('/list',function(req,res){
     User.find({},function(err,doc){

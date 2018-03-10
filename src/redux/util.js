@@ -1,11 +1,11 @@
 /**
  * Created by GRIMES on 2018/1/10 0010.
  */
-export function rediectTo({type,avator}){
+export function rediectTo({type,avatar}){
     //根据用户信息 返回跳转地址
     //user.type: boss genius
     //user.avator: /bossinfo,/geniusinfo
-    let url= avator
+    let url= avatar
         ? (type === 'boss' ? '/boss'    :'/genius')
         : (type === 'boss' ? '/bossinfo':'/geniusinfo')
     return url;

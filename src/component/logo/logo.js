@@ -3,9 +3,15 @@
  */
 import React from 'react';
 import ReactDom from 'react-dom';
+import styled from 'styled-components'
 
-import './logo.css'
 import logoImg from './job.png'
+
+const LogoBlock=styled.img`
+    text-align: center;
+    margin: 20px auto 0px auto;
+    display: block;
+`
 
 class Logo extends React.Component{
     constructor(){
@@ -15,7 +21,7 @@ class Logo extends React.Component{
 
             return(
                 <div>
-                    <img className="logo-container" src={logoImg}/>
+                    <LogoBlock src={logoImg}/>
                 </div>
             )
         }

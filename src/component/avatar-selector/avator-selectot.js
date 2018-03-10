@@ -1,14 +1,33 @@
-import './index.css'
-
+//@flow
 import React from 'react';
 import {Modal, Grid} from 'antd-mobile';
-import swal from 'sweetalert2';
-
+import styled from 'styled-components'
 let avatarList;
 let avatarAlert;
 const Alert = Modal.alert;
 
-class AvatorSelectot extends React.Component {
+const AvatorSelect=styled.div`
+    height: 100px;
+    width: 100px;
+    margin: 10% auto 0 auto;
+    background: white;
+    text-align: center;
+    line-height: 130px;
+    border-radius: 50%;
+    box-shadow: 0 0 5px 1px #d9d9d9;
+`;
+
+const Imgblock =styled.img`
+   width: 60px;
+   height: 60px;
+   paddingTop: 20%;
+`;
+
+type Props ={
+    onChange:Function
+}
+
+class AvatorSelectot extends React.Component<Props>{
     constructor() {
         super();
         this.state = {};
@@ -29,7 +48,9 @@ class AvatorSelectot extends React.Component {
             hasLine={false}
             columnNum={3}
             onClick={elm => {
-                this.setState(elm);
+                this.setState(elm,()=>{
+                    this.props.onChange('avatar',this.state.icon);
+                });
                 avatarAlert.close();
             }}/>
 
@@ -43,19 +64,20 @@ class AvatorSelectot extends React.Component {
         // )
     }
 
+
+
     render() {
         return (
             <div>
-                    <div onClick={this.openModel} className='img-warp'>
+                    <AvatorSelect onClick={this.openModel}>
                         {this.state.icon
-                            ? <img src={this.state.icon} style={{width: '60px', height: '60px', paddingTop: '20%'}}
+                            ? <Imgblock src={this.state.icon} style={{}}
                                    alt=""/>
                             : <span style={{color:'#cecece'}}>选择头像</span>
                         }
-                    </div>
+                    </AvatorSelect>
             </div>
         )
     }
 }
-
 export default AvatorSelectot
