@@ -8,7 +8,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
 const userRouter = require('./Router/userrouter');  //路由作为中间件
 

@@ -61,7 +61,7 @@ export  function login(state){
 
 //注册
 export  function register(state) {
-    var {name, pwd, confirmpwd, type}=state;
+    var {name, pwd, confirmpwd,isSupplement=1, type}=state;
     if (!name || !pwd || !confirmpwd) {
         return errMsg('请输入用户名或俩次密码并选择身份类型补充完整');
     }
@@ -70,7 +70,7 @@ export  function register(state) {
     }
     else {
         return dispatch => {
-            axios.post('/user/register', {name, pwd, type}).then((res) => {
+            axios.post('/user/register', {name, pwd, type,isSupplement}).then((res) => {
                 if (res.status === 200 && res.data.code === 0) {
                     const msg  = res.data.msg,
                           data = fromatId(res.data.data); //格式化ID
@@ -82,6 +82,11 @@ export  function register(state) {
             });
         };
     }
+}
+
+//加载用户信息
+export function loadUserInfo(state){
+    return dispatch=>dispatch(authSuccess(state));
 }
 
 export function updateUserInfo(state){

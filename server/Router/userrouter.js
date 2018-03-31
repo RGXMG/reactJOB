@@ -29,9 +29,11 @@ Router.get('/info',function(req,res){
     const { userid } = req.cookies
     if(userid){
         User.findOne({'_id':userid},_filter,function(err,doc){
-            if(err){return res.json({code:-1,msg:'Server Error'})}
-            else if(doc){ return res.json({code:0})}
-            else{return res.json({code:1})}
+            let json={};
+            if(err)json={code:-1,msg:'Server Error'}
+            else if(doc)json = {code:0,data:doc}
+            else json={code:1}
+            return res.json(json);
         })
     }
     else{
@@ -56,13 +58,14 @@ Router.post('/login',function(req,res){
 });
 
 Router.post('/register',function(req,res){
-    const {name,pwd,type}=req.body;
+    console.log(req);
+    const {name,pwd,type,isSupplement}=req.body;
     //判断是否已经存在用户名
     User.findOne({name},function(err,doc){
         if(doc){
             return res.json({code:1,msg:'用户名已存在'});
         }
-        const REuser=new User({name,pwd:utilyMd5(pwd),type});
+        //const REuser=new User({name,pwd:utilyMd5(pwd),type,isSupplement});
 
         //save方法保存到MongoDB数据
 
@@ -74,12 +77,13 @@ Router.post('/register',function(req,res){
         //     return {code:0,msg:'注册成功',data:doc}
         // });
 
-        User.create({name,pwd:utilyMd5(pwd),type},_filter,function(err,doc){
+        User.create({name,pwd:utilyMd5(pwd),type,isSupplement},_filter,function(err,doc){
             err && NoKonwError(res);
             //返回cookie信息
             res.cookie('userid',doc._id);
-            const {_id,name,type}=doc;
-            return res.json({code:0,msg:'注册成功',data:{_id,name,type}});
+            console.log(doc);
+            const {_id,name,type,isSupplement}=doc;
+            return res.json({code:0,msg:'注册成功',data:{_id,name,type,isSupplement}});
         })
     })
 });

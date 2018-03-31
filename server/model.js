@@ -15,6 +15,7 @@ const models = {
         'name'   : {'type': String, 'require': true}, //用户名
         'pwd'    : {'type': String, 'require': true}, //密码
         'type'   : {'type': String, 'require': true}, //用户类型
+        'isSupplement':{'type':Number,'require':true},//已经完善信息
         'avatar' : {'type': String, 'require': true}, //头像
         'desc'   : {'type': String, 'require': true}, //简历描述
         'title'  : {'type': String},  //职位名称

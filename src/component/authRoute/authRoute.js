@@ -6,7 +6,12 @@
 import React from 'react';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-
+import {connect} from 'react-redux';
+import {loadUserInfo} from '../../redux/user.redux'
+@connect(
+    state=>state.user,
+    {loadUserInfo}
+)
 @withRouter  //提供混合模式 minxs？？？
 class AuthRoute extends React.Component{
     componentWillMount(){
@@ -21,6 +26,10 @@ class AuthRoute extends React.Component{
                 else {
                     this.props.history.push('/login');
                 }
+
+            }
+            else{
+                this.props.loadUserInfo(res.data);
             }
         });
     }
